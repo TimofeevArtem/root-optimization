@@ -1,0 +1,119 @@
+{
+    "openapi":"3.0.3",
+    "info": {
+      "title":"Route Optimization API",
+      "version":"1.0"
+    },
+    "servers": [
+        {
+            "url": "https://example.com/v1",
+            "description": "Production server"
+        },
+        {
+            "url": "https://example.server.test/v1",
+            "description": "Test server"
+        }
+    ],
+    "paths": {
+        "/frontend":{
+            "servers": [
+                {
+                    "url": "https://frontend.example.com/v1",
+                    "description": "Production frontend server"
+                },
+                {
+                    "url": "https://frontend.server.test/v1",
+                    "description": "Test frontend server"
+                }
+            ],
+            "post":{
+                "tags": [
+                    "frontend_post"
+                ],
+                "summary": "Отправка введеных координат",
+                "requestBody":{
+                    "required": true,
+                    "content": {
+                        "application/json":{
+                            "schema":{
+                                "type": "object",
+                                "required": [
+                                    "self_coord",
+                                    "pickup_coord",
+                                    "list_of_coord"
+                                ],
+                                "properties": {
+                                    
+                                    "self_coord":{
+                                        "type": "string",
+                                        "description": "Начальные координаты курьера",
+                                        "example": "12.3241 -31.24142"
+                                    },
+                                    "pickup_coord":{
+                                        "type": "string",
+                                        "description": "Координаты заказа",
+                                        "example": "12.3241 -31.24142"
+                                    },
+                                    "list_of_coord":{
+                                        "type": "array",
+                                        "items":{
+                                            "type": "string",
+                                            "example": "12.3241 -31.24142"
+                                        },
+                                        "description": "Список координат доставки",
+                                        "minItems": 1
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200":{
+                        "description": "Данные были успешно добавлены"
+                    },
+                    "400":{
+                        "description": "Ошибка на стороне пользователя"
+                    },
+                    "500":{
+                        "description": "Ошибка на стороне сервера"
+                    }
+                }
+            },
+            "get":{
+                "tags": [
+                    "frontend_get"
+                ],
+                "summary": "Получение отсортированного порядка координат",
+                "operationId": "routesID",
+                "parameters": [
+                    {
+                        "name": "sorted_list",
+                        "description": "отсортированный порядок координат",
+                        "in": "query",
+                        "required": true,
+                        "schema":{
+                            "type": "array",
+                            "items":{
+                                "type": "string",
+                                "example": "12.3241 -31.24142"
+                            },
+                            "minItems": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200":{
+                        "description": "success"
+                    },
+                    "400":{
+                        "description": "Ошибка на стороне пользователя"
+                    },
+                    "500":{
+                        "description": "Ошибка на стороне сервера"
+                    }
+                }
+            }
+        }
+    }
+}
